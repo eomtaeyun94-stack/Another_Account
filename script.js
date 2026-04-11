@@ -1,4 +1,5 @@
-const API_KEY = "AIzaSyDl25IaXhLF9pQMOrc9MQig3E8xo3XgjvM";
+// 1. 여기에 발급받으신 Gemini API 키를 넣으세요.
+const API_KEY = "AIzaSyDl25IaXhLF9pQMOrc9MQig3E8xo3XgjvM"; 
 
 const chatDisplay = document.getElementById('chat-display');
 const userInput = document.getElementById('user-input');
@@ -10,29 +11,37 @@ async function handleSend() {
     const text = userInput.value.trim();
     if (!text) return;
 
-    // 첫 질문 시 인사말과 칩 숨기기
     if (greeting) greeting.style.display = 'none';
     if (chips) chips.style.display = 'none';
 
-    // 내 메시지 표시
     addMessage(text, 'user');
     userInput.value = "";
 
-    // AI 로딩 상태 표시
+    // 대기 상태 메시지
     const loadingMessage = addMessage("생각 중...", "ai");
-    
+
     try {
+        // 제미나이 API 호출 (가장 안정적인 v1beta 버전)
         const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${API_KEY}`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ contents: [{ parts: [{ text: text }] }] })
+            body: JSON.stringify({
+                contents: [{ parts: [{ text: text }] }]
+            })
         });
+
         const data = await response.json();
-        const aiText = data.candidates[0].content.parts[0].text;
-        
-        loadingMessage.innerText = aiText; // 로딩 문구를 실제 답변으로 교체
-    } catch (e) {
-        loadingMessage.innerText = "오류가 발생했습니다. 키를 확인해 주세요.";
+
+        if (data.error) {
+            throw new Error(data.error.message);
+        }
+
+        const aiResponse = data.candidates[0].content.parts[0].text;
+        loadingMessage.innerText = aiResponse;
+
+    } catch (error) {
+        console.error("Error:", error);
+        loadingMessage.innerText = "오류가 발생했습니다: " + error.message;
     }
 }
 
@@ -41,9 +50,13 @@ function addMessage(text, role) {
     div.classList.add('message', role === 'user' ? 'user-message' : 'ai-message');
     div.innerText = text;
     chatDisplay.appendChild(div);
-    window.scrollTo(0, document.body.scrollHeight);
+    
+    // 자동 스크롤
+    window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
     return div;
 }
 
 sendBtn.addEventListener('click', handleSend);
-userInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') handleSend(); });
+userInput.addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') handleSend();
+});
