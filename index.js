@@ -1,63 +1,49 @@
-// 주의: 이 방식은 클라이언트 측에 키가 노출됩니다. 테스트용으로만 확인하세요!
-async function askAI(prompt) {
-    const API_KEY = "// 주의: 이 방식은 클라이언트 측에 키가 노출됩니다. 테스트용으로만 확인하세요!
-async function askAI(prompt) {
-    const API_KEY = "발급받으신_키_여기에_입력"; 
-    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${API_KEY}`;
+const API_KEY = "AIzaSyDl25IaXhLF9pQMOrc9MQig3E8xo3XgjvM";
 
-    const response = await fetch(url, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-            contents: [{ parts: [{ text: prompt }] }]
-        })
-    });
+const chatDisplay = document.getElementById('chat-display');
+const userInput = document.getElementById('user-input');
+const sendBtn = document.getElementById('send-btn');
+const greeting = document.getElementById('greeting-area');
+const chips = document.getElementById('quick-chips');
 
-    const data = await response.json();
-    return data.candidates[0].content.parts[0].text;
+async function handleSend() {
+    const text = userInput.value.trim();
+    if (!text) return;
+
+    // 첫 질문 시 인사말과 칩 숨기기
+    if (greeting) greeting.style.display = 'none';
+    if (chips) chips.style.display = 'none';
+
+    // 내 메시지 표시
+    addMessage(text, 'user');
+    userInput.value = "";
+
+    // AI 로딩 상태 표시
+    const loadingMessage = addMessage("생각 중...", "ai");
+    
+    try {
+        const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${API_KEY}`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ contents: [{ parts: [{ text: text }] }] })
+        });
+        const data = await response.json();
+        const aiText = data.candidates[0].content.parts[0].text;
+        
+        loadingMessage.innerText = aiText; // 로딩 문구를 실제 답변으로 교체
+    } catch (e) {
+        loadingMessage.innerText = "오류가 발생했습니다. 키를 확인해 주세요.";
+    }
 }
 
-// 입력창에서 엔터를 쳤을 때 실행되는 로직 예시
-document.querySelector('.search-box input').addEventListener('keypress', async (e) => {
-    if (e.key === 'Enter') {
-        const userText = e.target.value;
-        e.target.value = "답변 생성 중...";
-        
-        try {
-            const aiResponse = await askAI(userText);
-            alert("AI 답변: " + aiResponse); // 실제로는 화면에 예쁘게 띄우는 코드를 짜야 합니다.
-        } catch (error) {
-            console.error("에러 발생:", error);
-        }
-        e.target.value = "";
-    }
-});"; 
-    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${API_KEY}`;
-
-    const response = await fetch(url, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-            contents: [{ parts: [{ text: prompt }] }]
-        })
-    });
-
-    const data = await response.json();
-    return data.candidates[0].content.parts[0].text;
+function addMessage(text, role) {
+    const div = document.createElement('div');
+    div.classList.add('message', role === 'user' ? 'user-message' : 'ai-message');
+    div.innerText = text;
+    chatDisplay.appendChild(div);
+    window.scrollTo(0, document.body.scrollHeight);
+    return div;
 }
 
-// 입력창에서 엔터를 쳤을 때 실행되는 로직 예시
-document.querySelector('.search-box input').addEventListener('keypress', async (e) => {
-    if (e.key === 'Enter') {
-        const userText = e.target.value;
-        e.target.value = "답변 생성 중...";
-        
-        try {
-            const aiResponse = await askAI(userText);
-            alert("AI 답변: " + aiResponse); // 실제로는 화면에 예쁘게 띄우는 코드를 짜야 합니다.
-        } catch (error) {
-            console.error("에러 발생:", error);
-        }
-        e.target.value = "";
-    }
-});
+sendBtn.addEventListener('click', handleSend);
+userInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') handleSend(); });
