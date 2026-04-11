@@ -1,0 +1,303 @@
+/* 기본 스타일 초기화 및 폰트 설정 */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Noto Sans KR', sans-serif;
+    -webkit-font-smoothing: antialiased; /* 폰트 매끄럽게 */
+}
+
+body {
+    background-color: #03040a; /* 깊고 어두운 베이스 컬러 */
+    color: #e3e3e3;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+    overflow-x: hidden; /* 가로 스크롤 방지 */
+    position: relative;
+}
+
+/* --- 배경 글로우 효과 (Glow UI의 핵심) --- */
+.bg-glow {
+    position: fixed;
+    border-radius: 50%;
+    filter: blur(100px); /* 아주 많이 흐리게 */
+    z-index: -1; /* 최하위 레이어 */
+    opacity: 0.15; /* 은은하게 */
+}
+
+.bg-glow-1 {
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, #3a5aff 0%, rgba(58, 90, 255, 0) 70%);
+    top: -200px;
+    right: -100px;
+}
+
+.bg-glow-2 {
+    width: 800px;
+    height: 800px;
+    background: radial-gradient(circle, #ff00ff 0%, rgba(255, 0, 255, 0) 70%);
+    bottom: -300px;
+    left: -200px;
+}
+
+/* --- 상단 네비게이션 --- */
+.navbar {
+    width: 100%;
+    max-width: 1400px;
+    padding: 20px 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: rgba(3, 4, 10, 0.8); /* 스크롤 시 반투명 */
+    backdrop-filter: blur(10px); /* 블러 효과 */
+    z-index: 10;
+}
+
+.logo {
+    font-size: 24px;
+    font-weight: 700;
+    letter-spacing: -1px;
+    color: #ffffff;
+    text-shadow: 0 0 10px rgba(255,255,255,0.3); /* 로고 살짝 글로우 */
+}
+
+.nav-right {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.upgrade-btn {
+    background: linear-gradient(135deg, #0a4675 0%, #003a61 100%); /* 그라데이션 버튼 */
+    color: #c2e7ff;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 25px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    box-shadow: 0 4px 15px rgba(0, 74, 119, 0.3);
+    transition: all 0.3s ease;
+}
+
+.upgrade-btn:hover {
+    box-shadow: 0 6px 20px rgba(0, 119, 255, 0.5);
+    transform: translateY(-1px);
+}
+
+.profile-icon {
+    background: #333639;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 13px;
+    font-weight: 500;
+    color: #ffffff;
+    border: 1px solid rgba(255,255,255,0.1);
+}
+
+/* --- 메인 컨텐츠 컨테이너 --- */
+.container {
+    width: 90%;
+    max-width: 850px;
+    margin-top: 150px; /* 네비게이션바 높이 고려 */
+    margin-bottom: 50px;
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+}
+
+.greeting-section {
+    margin-bottom: 60px;
+}
+
+.greeting-section h1 {
+    font-size: 36px;
+    font-weight: 600;
+    margin-bottom: 15px;
+    color: #ffffff;
+}
+
+.greeting-section p {
+    font-size: 20px;
+    color: #b0b0b0;
+    line-height: 1.4;
+    font-weight: 300;
+}
+
+/* --- 입력창 구역 (카드 스타일) --- */
+.input-area {
+    background: rgba(30, 31, 32, 0.7); /* 배경이 살짝 비치는 반투명 회색 */
+    border: 1px solid rgba(255, 255, 255, 0.05); /* 아주 얇은 테두리 */
+    border-radius: 28px;
+    padding: 20px 30px;
+    margin-bottom: 30px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4); /* 카드 그림자 */
+    backdrop-filter: blur(5px); /* 카드 안쪽 블러 */
+}
+
+.search-box input {
+    width: 100%;
+    background: transparent;
+    border: none;
+    color: #ffffff;
+    font-size: 18px;
+    outline: none;
+    margin-bottom: 20px;
+    padding: 10px 0;
+}
+
+.search-box input::placeholder {
+    color: #707070;
+}
+
+.input-tools {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: #acacac;
+}
+
+.left-tools, .right-tools {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.icon-btn {
+    cursor: pointer;
+    transition: color 0.2s;
+    font-size: 22px;
+}
+
+.icon-btn:hover {
+    color: #ffffff;
+}
+
+.tool-text {
+    font-size: 14px;
+    font-weight: 400;
+}
+
+.model-selector {
+    background: transparent;
+    color: #ffffff;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+    appearance: none; /* 기본 화살표 제거 */
+    -webkit-appearance: none;
+    padding-right: 15px;
+}
+
+/* --- 퀵 칩 버튼 (반투명 카드) --- */
+.quick-chips {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 80px;
+    overflow-x: auto;
+    padding-bottom: 10px; /* 스크롤바 공간 */
+}
+
+/* 가로 스크롤바 스타일링 */
+.quick-chips::-webkit-scrollbar {
+    height: 4px;
+}
+.quick-chips::-webkit-scrollbar-thumb {
+    background: rgba(255,255,255,0.1);
+    border-radius: 2px;
+}
+
+.chip {
+    background: rgba(30, 31, 32, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    color: #e3e3e3;
+    padding: 14px 24px;
+    border-radius: 14px;
+    white-space: nowrap;
+    cursor: pointer;
+    font-size: 14px;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.chip:hover {
+    background: rgba(50, 51, 52, 0.8);
+    border-color: rgba(255,255,255,0.2);
+    transform: translateY(-2px);
+}
+
+.chip-icon {
+    font-size: 1.1em;
+}
+
+/* --- 하단 배너 (가장자리 글로우 효과) --- */
+.info-banner {
+    background: rgba(26, 28, 30, 0.7);
+    padding: 25px;
+    border-radius: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    border: 1px solid rgba(255, 255, 255, 0.03);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    position: relative;
+    overflow: hidden;
+}
+
+/* 배너 상단에 얇은 파란색 빛 추가 */
+.info-banner::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: linear-gradient(90deg, #3a5aff, #ff00ff, #3a5aff);
+    opacity: 0.3;
+}
+
+.banner-content {
+    max-width: 90%;
+}
+
+.banner-content h3 {
+    font-size: 19px;
+    font-weight: 500;
+    margin-bottom: 10px;
+    color: #ffffff;
+}
+
+.banner-content p {
+    font-size: 13px;
+    color: #9aa0a6;
+    line-height: 1.6;
+    font-weight: 300;
+}
+
+.close-btn {
+    background: transparent;
+    border: none;
+    color: #808080;
+    font-size: 24px;
+    cursor: pointer;
+    margin-left: 15px;
+    transition: color 0.2s;
+}
+
+.close-btn:hover {
+    color: #ffffff;
+}
