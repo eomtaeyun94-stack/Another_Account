@@ -3,36 +3,101 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>🎉 생일룰렛 🎉</title>
+<title>OCtopus - 생일룰렛</title>
 
 <style>
-body{
+*{
     margin:0;
-    font-family: 'Segoe UI', sans-serif;
-    background: linear-gradient(135deg,#ff9a9e,#fad0c4);
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background:#0d0d0f;
+    color:#e5e5e5;
     display:flex;
     flex-direction:column;
     align-items:center;
-    justify-content:center;
-    height:100vh;
+    padding:20px;
+}
+
+/* 카드 느낌 */
+.container{
+    width:100%;
+    max-width:420px;
+    background:#121214;
+    border-radius:18px;
+    padding:20px;
+    box-shadow:0 0 20px rgba(0,0,0,0.5);
+}
+
+/* 제목 */
+.title{
+    font-size:22px;
+    font-weight:600;
+    margin-bottom:15px;
+}
+
+/* 구분선 */
+.divider{
+    height:1px;
+    background:#2a2a2d;
+    margin:15px 0;
+}
+
+/* 체크 리스트 */
+.list{
+    list-style:none;
+}
+
+.list li{
+    margin:10px 0;
+    color:#cfcfcf;
+}
+
+/* 강조 */
+.highlight{
     color:white;
+    font-weight:600;
 }
 
-h1{
-    margin-bottom:20px;
+/* 룰렛 영역 */
+.roulette-area{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    margin-top:20px;
 }
 
+/* 포인터 */
+#pointer{
+    width:0;
+    height:0;
+    border-left:12px solid transparent;
+    border-right:12px solid transparent;
+    border-bottom:25px solid #00ffe0;
+    margin-bottom:-10px;
+    filter: drop-shadow(0 0 6px #00ffe0);
+}
+
+/* 룰렛 */
 #wheel{
-    width:300px;
-    height:300px;
+    width:260px;
+    height:260px;
     border-radius:50%;
-    border:8px solid white;
+    border:2px solid #2a2a2d;
     position:relative;
     overflow:hidden;
-    transition: transform 4s ease-out;
+
+    box-shadow:
+        0 0 20px rgba(0,255,224,0.2),
+        inset 0 0 20px rgba(0,255,224,0.1);
+
+    transition: transform 4s cubic-bezier(0.2,0.8,0.2,1);
 }
 
-/* 두 칸 */
+/* 조각 */
 .slice{
     position:absolute;
     width:100%;
@@ -41,56 +106,83 @@ h1{
 }
 
 .slice1{
-    background:#ff6b6b;
+    background: linear-gradient(135deg,#00ffe0,#0099ff);
     transform: rotate(0deg);
 }
 
 .slice2{
-    background:#4ecdc4;
+    background: linear-gradient(135deg,#444,#222);
     transform: rotate(180deg);
 }
 
-#pointer{
-    width:0;
-    height:0;
-    border-left:15px solid transparent;
-    border-right:15px solid transparent;
-    border-bottom:30px solid white;
-    margin-bottom:-10px;
-}
-
+/* 버튼 */
 button{
     margin-top:20px;
-    padding:10px 20px;
-    font-size:18px;
+    padding:12px;
+    width:100%;
     border:none;
-    border-radius:10px;
-    background:white;
-    color:#ff6b6b;
+    border-radius:12px;
+    background:#1f1f22;
+    color:white;
+    font-size:16px;
     cursor:pointer;
+
+    transition:0.2s;
 }
 
+button:hover{
+    background:#2c2c30;
+}
+
+/* 결과 */
 #result{
-    margin-top:20px;
-    font-size:22px;
+    margin-top:15px;
+    font-size:18px;
+    text-align:center;
+}
+
+/* 글로우 애니메이션 */
+.glow{
+    animation: glow 2s infinite alternate;
+}
+
+@keyframes glow{
+    from{
+        box-shadow:0 0 10px rgba(0,255,224,0.2);
+    }
+    to{
+        box-shadow:0 0 25px rgba(0,255,224,0.6);
+    }
 }
 </style>
 </head>
 
 <body>
 
-<h1>🎉 생일룰렛 🎉</h1>
+<div class="container">
 
-<div id="pointer"></div>
+<div class="title">🎉 생일룰렛</div>
 
-<div id="wheel">
-    <div class="slice slice1"></div>
-    <div class="slice slice2"></div>
+<ul class="list">
+    <li>• 확률: <span class="highlight">0.1%</span> → 10004원</li>
+    <li>• 확률: <span class="highlight">99.9%</span> → 1004원</li>
+</ul>
+
+<div class="divider"></div>
+
+<div class="roulette-area">
+    <div id="pointer"></div>
+
+    <div id="wheel" class="glow">
+        <div class="slice slice1"></div>
+        <div class="slice slice2"></div>
+    </div>
+
+    <button onclick="spin()">돌리기 🎯</button>
+    <div id="result"></div>
 </div>
 
-<button onclick="spin()">돌리기 🎯</button>
-
-<div id="result"></div>
+</div>
 
 <script>
 let spinning = false;
@@ -102,23 +194,18 @@ function spin(){
     const wheel = document.getElementById("wheel");
     const resultText = document.getElementById("result");
 
-    // 🔥 확률 계산
     let rand = Math.random() * 100;
-    let result, targetAngle;
+    let result, angle;
 
     if(rand < 0.1){
-        // 0.1%
         result = "🎉 10004원 당첨!!";
-        targetAngle = 90; // slice1
+        angle = 90;
     } else {
-        // 99.9%
         result = "🙂 1004원";
-        targetAngle = 270; // slice2
+        angle = 270;
     }
 
-    // 회전값
-    let spinAngle = 360 * 6 + targetAngle;
-
+    let spinAngle = 360 * 6 + angle;
     wheel.style.transform = `rotate(${spinAngle}deg)`;
 
     setTimeout(()=>{
@@ -129,4 +216,4 @@ function spin(){
 </script>
 
 </body>
-</html>
+</html
