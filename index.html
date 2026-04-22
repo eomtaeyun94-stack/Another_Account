@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Birthday Cash Roulette</title>
     <style>
-        /* Gemini Dark Theme 스타일링 */
         body {
             background-color: #131314;
             color: #e3e3e3;
@@ -19,14 +18,13 @@
             overflow: hidden;
         }
 
-        /* 텍스트 영역 */
         .header-section {
             text-align: center;
-            margin-bottom: 40px;
+            margin-bottom: 50px;
         }
 
         .title {
-            font-size: 3rem;
+            font-size: 3.2rem;
             font-weight: 700;
             margin: 0 0 15px 0;
             background: linear-gradient(90deg, #4285f4, #9b72cb, #d96570);
@@ -35,76 +33,69 @@
         }
 
         .subtitle {
-            font-size: 1.1rem;
+            font-size: 1.2rem;
             color: #c4c7c5;
-            line-height: 1.6;
+            margin: 0;
+            font-weight: 300;
         }
 
-        .highlight {
-            color: #8ab4f8;
-            font-weight: bold;
-        }
-
-        /* 룰렛 슬롯 */
         .roulette-wrapper {
             display: flex;
             align-items: center;
             gap: 12px;
-            margin-bottom: 50px;
+            margin-bottom: 60px;
         }
 
         .slot {
-            width: 70px;
-            height: 100px;
+            width: 75px;
+            height: 110px;
             background: #1e1f20;
             border: 1px solid #444746;
-            border-radius: 12px;
+            border-radius: 16px;
             overflow: hidden;
             position: relative;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            box-shadow: 0 12px 40px rgba(0,0,0,0.6);
         }
 
         .slot-inner {
             position: absolute;
             top: 0;
             width: 100%;
-            transition: transform 0.1s; /* 초기화용 */
         }
 
         .num {
-            height: 100px;
+            height: 110px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 3.5rem;
+            font-size: 4rem;
             font-weight: 800;
             color: #8ab4f8;
         }
 
         .unit {
-            font-size: 2rem;
+            font-size: 2.2rem;
             font-weight: 600;
             color: #e3e3e3;
-            margin-left: 5px;
+            margin-left: 8px;
         }
 
-        /* 버튼 */
         #drawBtn {
-            padding: 18px 60px;
-            font-size: 1.2rem;
-            border-radius: 50px;
+            padding: 20px 70px;
+            font-size: 1.3rem;
+            border-radius: 60px;
             border: none;
-            background: #fff;
+            background: #ffffff;
             color: #131314;
             font-weight: 700;
             cursor: pointer;
-            transition: all 0.3s;
-            box-shadow: 0 0 20px rgba(138, 180, 248, 0.3);
+            transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+            box-shadow: 0 0 25px rgba(138, 180, 248, 0.3);
         }
 
         #drawBtn:hover {
             transform: scale(1.05);
-            box-shadow: 0 0 40px rgba(138, 180, 248, 0.5);
+            box-shadow: 0 0 45px rgba(138, 180, 248, 0.5);
         }
 
         #drawBtn:disabled {
@@ -112,6 +103,7 @@
             color: #888;
             cursor: not-allowed;
             transform: none;
+            box-shadow: none;
         }
     </style>
 </head>
@@ -119,10 +111,7 @@
 
     <div class="header-section">
         <h1 class="title">생일 축하합니다</h1>
-        <p class="subtitle">
-            아래 뽑기 시작 버튼을 통해 돈을 뽑아보세요<br>
-            한번 돌리신 후 <span class="highlight">엄태윤에게 디엠으로 사진을 발송</span> 하시면 됩니다
-        </p>
+        <p class="subtitle">아래 뽑기 시작 버튼을 통해 돈을 뽑아보세요</p>
     </div>
 
     <div class="roulette-wrapper">
@@ -146,10 +135,10 @@
         ];
         const btn = document.getElementById('drawBtn');
 
-        // 슬롯 초기화 (숫자 0-9를 여러 벌 미리 생성)
+        // 초기 숫자판 생성
         slots.forEach(slot => {
             let nums = "";
-            for (let i = 0; i < 50; i++) {
+            for (let i = 0; i < 70; i++) {
                 nums += `<div class="num">${i % 10}</div>`;
             }
             slot.innerHTML = nums;
@@ -158,28 +147,35 @@
         function spin() {
             btn.disabled = true;
 
-            // 확률 계산 (0.1% 확률로 10004원, 나머지 1004원)
-            const isJackpot = Math.random() < 0.001;
-            const resultStr = isJackpot ? "10004" : "01004";
-            const resultArr = resultStr.split("");
+            // 로직: 0.1% 확률로 10004원, 나머지 99.9%는 1004~1999 랜덤
+            const isJackpot = Math.random() < 0.001; 
+            let resultAmount;
+            
+            if (isJackpot) {
+                resultAmount = "10004";
+            } else {
+                // 1004 ~ 1999 사이 랜덤 생성 후 5자리 문자열로 변환 (앞에 0 채움)
+                const randomNormal = Math.floor(Math.random() * (1999 - 1004 + 1)) + 1004;
+                resultAmount = randomNormal.toString().padStart(5, '0');
+            }
 
-            // 냥코 룰렛 스타일: 왼쪽부터 순차적으로 정지
+            const resultArr = resultAmount.split("");
+
             resultArr.forEach((digit, index) => {
                 setTimeout(() => {
                     const targetDigit = parseInt(digit);
-                    // 40바퀴 정도 회전 후 해당 숫자에서 멈춤 (애니메이션)
-                    const finalPosition = -((40 + targetDigit) * 100);
+                    // 50바퀴 회전 연출 후 멈춤
+                    const finalPosition = -((50 + targetDigit) * 110);
                     
-                    slots[index].style.transition = `transform ${2 + index * 0.6}s cubic-bezier(0.15, 0, 0.15, 1)`;
+                    slots[index].style.transition = `transform ${2.5 + index * 0.7}s cubic-bezier(0.1, 0.45, 0.1, 1)`;
                     slots[index].style.transform = `translateY(${finalPosition}px)`;
-                }, index * 400); // 0.4초 간격으로 한 자리씩 멈추기 시작
+                }, index * 450);
             });
 
-            // 모든 연출이 끝나면 알림
             setTimeout(() => {
-                const finalWon = isJackpot ? "10,004" : "1,004";
-                alert(`축하합니다! ${finalWon}원에 당첨되셨습니다!\n캡처해서 엄태윤님께 보내주세요!`);
-            }, 5000);
+                const displayWon = parseInt(resultAmount).toLocaleString();
+                alert(`축하합니다! ${displayWon}원에 당첨되셨습니다!`);
+            }, 6500);
         }
 
         btn.addEventListener('click', spin);
