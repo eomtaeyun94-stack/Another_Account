@@ -3,20 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Birthday Roulette</title>
+    <title>Birthday Cash Roulette</title>
     <style>
-        :root {
-            --bg-color: #131314;
-            --card-bg: #1e1f20;
-            --text-main: #e3e3e3;
-            --accent-blue: #8ab4f8;
-            --accent-purple: #c58af9;
-            --gradient: linear-gradient(90deg, #4285f4, #9b72cb, #d96570);
-        }
-
+        /* Gemini Dark Theme 스타일링 */
         body {
-            background-color: var(--bg-color);
-            color: var(--text-main);
+            background-color: #131314;
+            color: #e3e3e3;
             font-family: 'Pretendard', sans-serif;
             display: flex;
             flex-direction: column;
@@ -27,162 +19,170 @@
             overflow: hidden;
         }
 
-        .container {
+        /* 텍스트 영역 */
+        .header-section {
             text-align: center;
-            background: var(--card-bg);
-            padding: 2rem;
-            border-radius: 24px;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+            margin-bottom: 40px;
         }
 
-        h1 {
-            font-size: 1.5rem;
-            margin-bottom: 2rem;
-            background: var(--gradient);
+        .title {
+            font-size: 3rem;
+            font-weight: 700;
+            margin: 0 0 15px 0;
+            background: linear-gradient(90deg, #4285f4, #9b72cb, #d96570);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
 
-        .canvas-container {
+        .subtitle {
+            font-size: 1.1rem;
+            color: #c4c7c5;
+            line-height: 1.6;
+        }
+
+        .highlight {
+            color: #8ab4f8;
+            font-weight: bold;
+        }
+
+        /* 룰렛 슬롯 */
+        .roulette-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 50px;
+        }
+
+        .slot {
+            width: 70px;
+            height: 100px;
+            background: #1e1f20;
+            border: 1px solid #444746;
+            border-radius: 12px;
+            overflow: hidden;
             position: relative;
-            margin-bottom: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
 
-        #roulette {
-            border-radius: 50%;
-            border: 4px solid #3c4043;
-            transition: transform 4s cubic-bezier(0.15, 0, 0.15, 1);
-        }
-
-        .arrow {
+        .slot-inner {
             position: absolute;
-            top: -20px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 0;
-            height: 0;
-            border-left: 15px solid transparent;
-            border-right: 15px solid transparent;
-            border-top: 30px solid var(--accent-blue);
-            z-index: 10;
+            top: 0;
+            width: 100%;
+            transition: transform 0.1s; /* 초기화용 */
         }
 
-        button {
-            background: #ffffff;
-            color: #131314;
-            border: none;
-            padding: 12px 32px;
-            font-size: 1rem;
+        .num {
+            height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3.5rem;
+            font-weight: 800;
+            color: #8ab4f8;
+        }
+
+        .unit {
+            font-size: 2rem;
             font-weight: 600;
+            color: #e3e3e3;
+            margin-left: 5px;
+        }
+
+        /* 버튼 */
+        #drawBtn {
+            padding: 18px 60px;
+            font-size: 1.2rem;
             border-radius: 50px;
+            border: none;
+            background: #fff;
+            color: #131314;
+            font-weight: 700;
             cursor: pointer;
             transition: all 0.3s;
+            box-shadow: 0 0 20px rgba(138, 180, 248, 0.3);
         }
 
-        button:hover {
-            background: var(--accent-blue);
+        #drawBtn:hover {
             transform: scale(1.05);
+            box-shadow: 0 0 40px rgba(138, 180, 248, 0.5);
         }
 
-        button:disabled {
-            background: #3c4043;
+        #drawBtn:disabled {
+            background: #444746;
+            color: #888;
             cursor: not-allowed;
-        }
-
-        #result {
-            margin-top: 1.5rem;
-            font-size: 1.2rem;
-            font-weight: 500;
-            min-height: 1.5rem;
+            transform: none;
         }
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <h1>✨ Happy Birthday Roulette ✨</h1>
-        
-        <div class="canvas-container">
-            <div class="arrow"></div>
-            <canvas id="roulette" width="300" height="300"></canvas>
-        </div>
-
-        <button onclick="spin()" id="spinBtn">행운의 룰렛 돌리기</button>
-        <div id="result"></div>
+    <div class="header-section">
+        <h1 class="title">생일 축하합니다</h1>
+        <p class="subtitle">
+            아래 뽑기 시작 버튼을 통해 돈을 뽑아보세요<br>
+            한번 돌리신 후 <span class="highlight">엄태윤에게 디엠으로 사진을 발송</span> 하시면 됩니다
+        </p>
     </div>
 
+    <div class="roulette-wrapper">
+        <div class="slot"><div id="s1" class="slot-inner"></div></div>
+        <div class="slot"><div id="s2" class="slot-inner"></div></div>
+        <div class="slot"><div id="s3" class="slot-inner"></div></div>
+        <div class="slot"><div id="s4" class="slot-inner"></div></div>
+        <div class="slot"><div id="s5" class="slot-inner"></div></div>
+        <span class="unit">원</span>
+    </div>
+
+    <button id="drawBtn">뽑기 시작</button>
+
     <script>
-        const canvas = document.getElementById('roulette');
-        const ctx = canvas.getContext('2d');
-        const resultDiv = document.getElementById('result');
-        const spinBtn = document.getElementById('spinBtn');
-
-        // 확률 설정
-        const prizes = [
-            { label: "10004원", weight: 1, color: "#c58af9" }, // 0.1% (가중치로 계산)
-            { label: "1004원", weight: 999, color: "#1e1f20" }  // 99.9%
+        const slots = [
+            document.getElementById('s1'),
+            document.getElementById('s2'),
+            document.getElementById('s3'),
+            document.getElementById('s4'),
+            document.getElementById('s5')
         ];
+        const btn = document.getElementById('drawBtn');
 
-        // 룰렛 그리기 (비율은 시각적으로 50:50으로 보여서 기대감을 줍니다)
-        function drawRoulette() {
-            const sectors = 12; // 칸을 여러개로 나눠 시각적 재미 추가
-            const arc = (2 * Math.PI) / sectors;
-
-            for (let i = 0; i < sectors; i++) {
-                ctx.beginPath();
-                ctx.fillStyle = i % 2 === 0 ? "#1e1f20" : "#2a2b2e";
-                // 10004원 칸은 딱 하나만 눈에 띄게 표시
-                if (i === 0) ctx.fillStyle = "#8ab4f8"; 
-                
-                ctx.moveTo(150, 150);
-                ctx.arc(150, 150, 150, i * arc, (i + 1) * arc);
-                ctx.fill();
-                ctx.stroke();
-                ctx.strokeStyle = "#3c4043";
-
-                // 텍스트 추가
-                ctx.save();
-                ctx.translate(150, 150);
-                ctx.rotate(i * arc + arc / 2);
-                ctx.textAlign = "right";
-                ctx.fillStyle = "#ffffff";
-                ctx.font = "bold 14px Arial";
-                ctx.fillText(i === 0 ? "10004" : "1004", 130, 10);
-                ctx.restore();
+        // 슬롯 초기화 (숫자 0-9를 여러 벌 미리 생성)
+        slots.forEach(slot => {
+            let nums = "";
+            for (let i = 0; i < 50; i++) {
+                nums += `<div class="num">${i % 10}</div>`;
             }
-        }
-
-        drawRoulette();
+            slot.innerHTML = nums;
+        });
 
         function spin() {
-            spinBtn.disabled = true;
-            resultDiv.innerText = "두근두근...";
+            btn.disabled = true;
 
-            // 0 ~ 999 사이의 랜덤 숫자 생성
-            const rand = Math.floor(Math.random() * 1000);
-            let winIdx = rand === 0 ? 0 : 1; // 0이 나오면 10004원 (0.1%)
+            // 확률 계산 (0.1% 확률로 10004원, 나머지 1004원)
+            const isJackpot = Math.random() < 0.001;
+            const resultStr = isJackpot ? "10004" : "01004";
+            const resultArr = resultStr.split("");
 
-            const rotateCount = 5; // 바퀴 수
-            const extraDegree = winIdx === 0 ? 0 : (Math.random() * 330 + 30); 
-            // 실제 로직은 확률에 따르되, 멈추는 위치를 조절
-            const totalRotation = (rotateCount * 360) + extraDegree;
+            // 냥코 룰렛 스타일: 왼쪽부터 순차적으로 정지
+            resultArr.forEach((digit, index) => {
+                setTimeout(() => {
+                    const targetDigit = parseInt(digit);
+                    // 40바퀴 정도 회전 후 해당 숫자에서 멈춤 (애니메이션)
+                    const finalPosition = -((40 + targetDigit) * 100);
+                    
+                    slots[index].style.transition = `transform ${2 + index * 0.6}s cubic-bezier(0.15, 0, 0.15, 1)`;
+                    slots[index].style.transform = `translateY(${finalPosition}px)`;
+                }, index * 400); // 0.4초 간격으로 한 자리씩 멈추기 시작
+            });
 
-            canvas.style.transform = `rotate(${totalRotation}deg)`;
-
+            // 모든 연출이 끝나면 알림
             setTimeout(() => {
-                const prize = prizes[winIdx].label;
-                resultDiv.innerText = `🎉 당첨! ${prize} 🎉`;
-                if(winIdx === 0) {
-                    resultDiv.style.color = "#8ab4f8";
-                    resultDiv.innerHTML += "<br>대박! 0.1%의 확률을 뚫으셨네요!";
-                }
-                spinBtn.disabled = false;
-                // 리셋을 위해 회전값 유지
-                canvas.style.transition = 'none';
-                canvas.style.transform = `rotate(${totalRotation % 360}deg)`;
-                setTimeout(() => canvas.style.transition = 'transform 4s cubic-bezier(0.15, 0, 0.15, 1)', 50);
-            }, 4000);
+                const finalWon = isJackpot ? "10,004" : "1,004";
+                alert(`축하합니다! ${finalWon}원에 당첨되셨습니다!\n캡처해서 엄태윤님께 보내주세요!`);
+            }, 5000);
         }
+
+        btn.addEventListener('click', spin);
     </script>
 </body>
 </html>
