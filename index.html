@@ -18,22 +18,23 @@
             overflow: hidden;
         }
 
+        /* 전체적인 크기 축소 */
         .header-section {
             text-align: center;
-            margin-bottom: 50px;
+            margin-bottom: 30px;
         }
 
         .title {
-            font-size: 3.2rem;
+            font-size: 2.2rem; /* 크기 축소 */
             font-weight: 700;
-            margin: 0 0 15px 0;
+            margin: 0 0 10px 0;
             background: linear-gradient(90deg, #4285f4, #9b72cb, #d96570);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
 
         .subtitle {
-            font-size: 1.2rem;
+            font-size: 0.95rem; /* 크기 축소 */
             color: #c4c7c5;
             margin: 0;
             font-weight: 300;
@@ -42,19 +43,19 @@
         .roulette-wrapper {
             display: flex;
             align-items: center;
-            gap: 12px;
-            margin-bottom: 60px;
+            gap: 8px; /* 간격 축소 */
+            margin-bottom: 40px;
         }
 
         .slot {
-            width: 75px;
-            height: 110px;
+            width: 55px; /* 75px -> 55px */
+            height: 80px; /* 110px -> 80px */
             background: #1e1f20;
             border: 1px solid #444746;
-            border-radius: 16px;
+            border-radius: 12px;
             overflow: hidden;
             position: relative;
-            box-shadow: 0 12px 40px rgba(0,0,0,0.6);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.6);
         }
 
         .slot-inner {
@@ -64,38 +65,38 @@
         }
 
         .num {
-            height: 110px;
+            height: 80px; /* 슬롯 높이와 동일하게 */
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 4rem;
+            font-size: 2.8rem; /* 4rem -> 2.8rem */
             font-weight: 800;
             color: #8ab4f8;
         }
 
         .unit {
-            font-size: 2.2rem;
+            font-size: 1.5rem; /* 크기 축소 */
             font-weight: 600;
             color: #e3e3e3;
-            margin-left: 8px;
+            margin-left: 5px;
         }
 
         #drawBtn {
-            padding: 20px 70px;
-            font-size: 1.3rem;
-            border-radius: 60px;
+            padding: 15px 50px; /* 패딩 축소 */
+            font-size: 1.1rem;
+            border-radius: 50px;
             border: none;
             background: #ffffff;
             color: #131314;
             font-weight: 700;
             cursor: pointer;
             transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
-            box-shadow: 0 0 25px rgba(138, 180, 248, 0.3);
+            box-shadow: 0 0 20px rgba(138, 180, 248, 0.2);
         }
 
         #drawBtn:hover {
             transform: scale(1.05);
-            box-shadow: 0 0 45px rgba(138, 180, 248, 0.5);
+            box-shadow: 0 0 35px rgba(138, 180, 248, 0.4);
         }
 
         #drawBtn:disabled {
@@ -134,8 +135,8 @@
             document.getElementById('s5')
         ];
         const btn = document.getElementById('drawBtn');
+        const slotHeight = 80; // 변경된 슬롯 높이
 
-        // 초기 숫자판 생성
         slots.forEach(slot => {
             let nums = "";
             for (let i = 0; i < 70; i++) {
@@ -147,14 +148,12 @@
         function spin() {
             btn.disabled = true;
 
-            // 로직: 0.1% 확률로 10004원, 나머지 99.9%는 1004~1999 랜덤
             const isJackpot = Math.random() < 0.001; 
             let resultAmount;
             
             if (isJackpot) {
                 resultAmount = "10004";
             } else {
-                // 1004 ~ 1999 사이 랜덤 생성 후 5자리 문자열로 변환 (앞에 0 채움)
                 const randomNormal = Math.floor(Math.random() * (1999 - 1004 + 1)) + 1004;
                 resultAmount = randomNormal.toString().padStart(5, '0');
             }
@@ -164,8 +163,7 @@
             resultArr.forEach((digit, index) => {
                 setTimeout(() => {
                     const targetDigit = parseInt(digit);
-                    // 50바퀴 회전 연출 후 멈춤
-                    const finalPosition = -((50 + targetDigit) * 110);
+                    const finalPosition = -((50 + targetDigit) * slotHeight);
                     
                     slots[index].style.transition = `transform ${2.5 + index * 0.7}s cubic-bezier(0.1, 0.45, 0.1, 1)`;
                     slots[index].style.transform = `translateY(${finalPosition}px)`;
