@@ -1,219 +1,188 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>OCtopus - 생일룰렛</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Birthday Roulette</title>
+    <style>
+        :root {
+            --bg-color: #131314;
+            --card-bg: #1e1f20;
+            --text-main: #e3e3e3;
+            --accent-blue: #8ab4f8;
+            --accent-purple: #c58af9;
+            --gradient: linear-gradient(90deg, #4285f4, #9b72cb, #d96570);
+        }
 
-<style>
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-}
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: 'Pretendard', sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
+        }
 
-body{
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-    background:#0d0d0f;
-    color:#e5e5e5;
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    padding:20px;
-}
+        .container {
+            text-align: center;
+            background: var(--card-bg);
+            padding: 2rem;
+            border-radius: 24px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+        }
 
-/* 카드 느낌 */
-.container{
-    width:100%;
-    max-width:420px;
-    background:#121214;
-    border-radius:18px;
-    padding:20px;
-    box-shadow:0 0 20px rgba(0,0,0,0.5);
-}
+        h1 {
+            font-size: 1.5rem;
+            margin-bottom: 2rem;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
 
-/* 제목 */
-.title{
-    font-size:22px;
-    font-weight:600;
-    margin-bottom:15px;
-}
+        .canvas-container {
+            position: relative;
+            margin-bottom: 2rem;
+        }
 
-/* 구분선 */
-.divider{
-    height:1px;
-    background:#2a2a2d;
-    margin:15px 0;
-}
+        #roulette {
+            border-radius: 50%;
+            border: 4px solid #3c4043;
+            transition: transform 4s cubic-bezier(0.15, 0, 0.15, 1);
+        }
 
-/* 체크 리스트 */
-.list{
-    list-style:none;
-}
+        .arrow {
+            position: absolute;
+            top: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+            border-left: 15px solid transparent;
+            border-right: 15px solid transparent;
+            border-top: 30px solid var(--accent-blue);
+            z-index: 10;
+        }
 
-.list li{
-    margin:10px 0;
-    color:#cfcfcf;
-}
+        button {
+            background: #ffffff;
+            color: #131314;
+            border: none;
+            padding: 12px 32px;
+            font-size: 1rem;
+            font-weight: 600;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
 
-/* 강조 */
-.highlight{
-    color:white;
-    font-weight:600;
-}
+        button:hover {
+            background: var(--accent-blue);
+            transform: scale(1.05);
+        }
 
-/* 룰렛 영역 */
-.roulette-area{
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    margin-top:20px;
-}
+        button:disabled {
+            background: #3c4043;
+            cursor: not-allowed;
+        }
 
-/* 포인터 */
-#pointer{
-    width:0;
-    height:0;
-    border-left:12px solid transparent;
-    border-right:12px solid transparent;
-    border-bottom:25px solid #00ffe0;
-    margin-bottom:-10px;
-    filter: drop-shadow(0 0 6px #00ffe0);
-}
-
-/* 룰렛 */
-#wheel{
-    width:260px;
-    height:260px;
-    border-radius:50%;
-    border:2px solid #2a2a2d;
-    position:relative;
-    overflow:hidden;
-
-    box-shadow:
-        0 0 20px rgba(0,255,224,0.2),
-        inset 0 0 20px rgba(0,255,224,0.1);
-
-    transition: transform 4s cubic-bezier(0.2,0.8,0.2,1);
-}
-
-/* 조각 */
-.slice{
-    position:absolute;
-    width:100%;
-    height:100%;
-    clip-path: polygon(50% 50%, 100% 0%, 100% 100%);
-}
-
-.slice1{
-    background: linear-gradient(135deg,#00ffe0,#0099ff);
-    transform: rotate(0deg);
-}
-
-.slice2{
-    background: linear-gradient(135deg,#444,#222);
-    transform: rotate(180deg);
-}
-
-/* 버튼 */
-button{
-    margin-top:20px;
-    padding:12px;
-    width:100%;
-    border:none;
-    border-radius:12px;
-    background:#1f1f22;
-    color:white;
-    font-size:16px;
-    cursor:pointer;
-
-    transition:0.2s;
-}
-
-button:hover{
-    background:#2c2c30;
-}
-
-/* 결과 */
-#result{
-    margin-top:15px;
-    font-size:18px;
-    text-align:center;
-}
-
-/* 글로우 애니메이션 */
-.glow{
-    animation: glow 2s infinite alternate;
-}
-
-@keyframes glow{
-    from{
-        box-shadow:0 0 10px rgba(0,255,224,0.2);
-    }
-    to{
-        box-shadow:0 0 25px rgba(0,255,224,0.6);
-    }
-}
-</style>
+        #result {
+            margin-top: 1.5rem;
+            font-size: 1.2rem;
+            font-weight: 500;
+            min-height: 1.5rem;
+        }
+    </style>
 </head>
-
 <body>
 
-<div class="container">
+    <div class="container">
+        <h1>✨ Happy Birthday Roulette ✨</h1>
+        
+        <div class="canvas-container">
+            <div class="arrow"></div>
+            <canvas id="roulette" width="300" height="300"></canvas>
+        </div>
 
-<div class="title">🎉 생일룰렛</div>
-
-<ul class="list">
-    <li>• 확률: <span class="highlight">0.1%</span> → 10004원</li>
-    <li>• 확률: <span class="highlight">99.9%</span> → 1004원</li>
-</ul>
-
-<div class="divider"></div>
-
-<div class="roulette-area">
-    <div id="pointer"></div>
-
-    <div id="wheel" class="glow">
-        <div class="slice slice1"></div>
-        <div class="slice slice2"></div>
+        <button onclick="spin()" id="spinBtn">행운의 룰렛 돌리기</button>
+        <div id="result"></div>
     </div>
 
-    <button onclick="spin()">돌리기 🎯</button>
-    <div id="result"></div>
-</div>
+    <script>
+        const canvas = document.getElementById('roulette');
+        const ctx = canvas.getContext('2d');
+        const resultDiv = document.getElementById('result');
+        const spinBtn = document.getElementById('spinBtn');
 
-</div>
+        // 확률 설정
+        const prizes = [
+            { label: "10004원", weight: 1, color: "#c58af9" }, // 0.1% (가중치로 계산)
+            { label: "1004원", weight: 999, color: "#1e1f20" }  // 99.9%
+        ];
 
-<script>
-let spinning = false;
+        // 룰렛 그리기 (비율은 시각적으로 50:50으로 보여서 기대감을 줍니다)
+        function drawRoulette() {
+            const sectors = 12; // 칸을 여러개로 나눠 시각적 재미 추가
+            const arc = (2 * Math.PI) / sectors;
 
-function spin(){
-    if(spinning) return;
-    spinning = true;
+            for (let i = 0; i < sectors; i++) {
+                ctx.beginPath();
+                ctx.fillStyle = i % 2 === 0 ? "#1e1f20" : "#2a2b2e";
+                // 10004원 칸은 딱 하나만 눈에 띄게 표시
+                if (i === 0) ctx.fillStyle = "#8ab4f8"; 
+                
+                ctx.moveTo(150, 150);
+                ctx.arc(150, 150, 150, i * arc, (i + 1) * arc);
+                ctx.fill();
+                ctx.stroke();
+                ctx.strokeStyle = "#3c4043";
 
-    const wheel = document.getElementById("wheel");
-    const resultText = document.getElementById("result");
+                // 텍스트 추가
+                ctx.save();
+                ctx.translate(150, 150);
+                ctx.rotate(i * arc + arc / 2);
+                ctx.textAlign = "right";
+                ctx.fillStyle = "#ffffff";
+                ctx.font = "bold 14px Arial";
+                ctx.fillText(i === 0 ? "10004" : "1004", 130, 10);
+                ctx.restore();
+            }
+        }
 
-    let rand = Math.random() * 100;
-    let result, angle;
+        drawRoulette();
 
-    if(rand < 0.1){
-        result = "🎉 10004원 당첨!!";
-        angle = 90;
-    } else {
-        result = "🙂 1004원";
-        angle = 270;
-    }
+        function spin() {
+            spinBtn.disabled = true;
+            resultDiv.innerText = "두근두근...";
 
-    let spinAngle = 360 * 6 + angle;
-    wheel.style.transform = `rotate(${spinAngle}deg)`;
+            // 0 ~ 999 사이의 랜덤 숫자 생성
+            const rand = Math.floor(Math.random() * 1000);
+            let winIdx = rand === 0 ? 0 : 1; // 0이 나오면 10004원 (0.1%)
 
-    setTimeout(()=>{
-        resultText.innerText = result;
-        spinning = false;
-    },4000);
-}
-</script>
+            const rotateCount = 5; // 바퀴 수
+            const extraDegree = winIdx === 0 ? 0 : (Math.random() * 330 + 30); 
+            // 실제 로직은 확률에 따르되, 멈추는 위치를 조절
+            const totalRotation = (rotateCount * 360) + extraDegree;
 
+            canvas.style.transform = `rotate(${totalRotation}deg)`;
+
+            setTimeout(() => {
+                const prize = prizes[winIdx].label;
+                resultDiv.innerText = `🎉 당첨! ${prize} 🎉`;
+                if(winIdx === 0) {
+                    resultDiv.style.color = "#8ab4f8";
+                    resultDiv.innerHTML += "<br>대박! 0.1%의 확률을 뚫으셨네요!";
+                }
+                spinBtn.disabled = false;
+                // 리셋을 위해 회전값 유지
+                canvas.style.transition = 'none';
+                canvas.style.transform = `rotate(${totalRotation % 360}deg)`;
+                setTimeout(() => canvas.style.transition = 'transform 4s cubic-bezier(0.15, 0, 0.15, 1)', 50);
+            }, 4000);
+        }
+    </script>
 </body>
-</html
+</html>
