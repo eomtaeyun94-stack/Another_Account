@@ -18,14 +18,13 @@
             overflow: hidden;
         }
 
-        /* 전체적인 크기 축소 */
         .header-section {
             text-align: center;
             margin-bottom: 30px;
         }
 
         .title {
-            font-size: 2.2rem; /* 크기 축소 */
+            font-size: 2.2rem;
             font-weight: 700;
             margin: 0 0 10px 0;
             background: linear-gradient(90deg, #4285f4, #9b72cb, #d96570);
@@ -34,7 +33,7 @@
         }
 
         .subtitle {
-            font-size: 0.95rem; /* 크기 축소 */
+            font-size: 0.95rem;
             color: #c4c7c5;
             margin: 0;
             font-weight: 300;
@@ -43,13 +42,13 @@
         .roulette-wrapper {
             display: flex;
             align-items: center;
-            gap: 8px; /* 간격 축소 */
+            gap: 8px;
             margin-bottom: 40px;
         }
 
         .slot {
-            width: 55px; /* 75px -> 55px */
-            height: 80px; /* 110px -> 80px */
+            width: 55px;
+            height: 80px;
             background: #1e1f20;
             border: 1px solid #444746;
             border-radius: 12px;
@@ -65,24 +64,24 @@
         }
 
         .num {
-            height: 80px; /* 슬롯 높이와 동일하게 */
+            height: 80px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 2.8rem; /* 4rem -> 2.8rem */
+            font-size: 2.8rem;
             font-weight: 800;
             color: #8ab4f8;
         }
 
         .unit {
-            font-size: 1.5rem; /* 크기 축소 */
+            font-size: 1.5rem;
             font-weight: 600;
             color: #e3e3e3;
             margin-left: 5px;
         }
 
         #drawBtn {
-            padding: 15px 50px; /* 패딩 축소 */
+            padding: 15px 50px;
             font-size: 1.1rem;
             border-radius: 50px;
             border: none;
@@ -135,8 +134,9 @@
             document.getElementById('s5')
         ];
         const btn = document.getElementById('drawBtn');
-        const slotHeight = 80; // 변경된 슬롯 높이
+        const slotHeight = 80;
 
+        // 슬롯 초기화 (숫자 채우기)
         slots.forEach(slot => {
             let nums = "";
             for (let i = 0; i < 70; i++) {
@@ -148,31 +148,40 @@
         function spin() {
             btn.disabled = true;
 
-            const isJackpot = Math.random() < 0.001; 
-            let resultAmount;
+            // 1. 천의 자리 결정 로직 (0~1 사이 난수 활용)
+            const rand = Math.random();
+            let thousandDigit;
             
-            if (isJackpot) {
-                resultAmount = "10004";
+            if (rand < 0.44) {
+                thousandDigit = 1; // 44% 확률로 1
             } else {
-                const randomNormal = Math.floor(Math.random() * (1999 - 1004 + 1)) + 1004;
-                resultAmount = randomNormal.toString().padStart(5, '0');
+                thousandDigit = 2; // 56% 확률로 2
             }
 
+            // 2. 나머지 백, 십, 일의 자리 무작위 결정
+            const rest = Math.floor(Math.random() * 1000).toString().padStart(3, '0');
+            
+            // 3. 최종 5자리 문자열 생성 (만의 자리는 0으로 고정)
+            const resultAmount = "0" + thousandDigit.toString() + rest;
             const resultArr = resultAmount.split("");
 
+            // 4. 애니메이션 실행
             resultArr.forEach((digit, index) => {
                 setTimeout(() => {
                     const targetDigit = parseInt(digit);
+                    // 회전 효과를 위해 기본 50바퀴를 더함
                     const finalPosition = -((50 + targetDigit) * slotHeight);
                     
                     slots[index].style.transition = `transform ${2.5 + index * 0.7}s cubic-bezier(0.1, 0.45, 0.1, 1)`;
                     slots[index].style.transform = `translateY(${finalPosition}px)`;
-                }, index * 450);
+                }, index * 300); // 간격 약간 단축
             });
 
+            // 5. 결과 알림
             setTimeout(() => {
-                const displayWon = parseInt(resultAmount).toLocaleString();
-                alert(`축하합니다! ${displayWon}원에 당첨되셨습니다!`);
+                const finalValue = parseInt(resultAmount);
+                alert(`축하합니다! ${finalValue.toLocaleString()}원에 당첨되셨습니다!`);
+                btn.disabled = false; // 재참여 가능하도록 버튼 활성화 (선택 사항)
             }, 6500);
         }
 
