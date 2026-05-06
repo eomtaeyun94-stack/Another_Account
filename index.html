@@ -61,6 +61,7 @@
             position: absolute;
             top: 0;
             width: 100%;
+            transition: transform 0s; /* 초기화용 */
         }
 
         .num {
@@ -136,6 +137,7 @@
         const btn = document.getElementById('drawBtn');
         const slotHeight = 80;
 
+        // 슬롯에 숫자 채우기 (연속적인 회전 효과를 위해 숫자 반복)
         slots.forEach(slot => {
             let nums = "";
             for (let i = 0; i < 70; i++) {
@@ -147,31 +149,39 @@
         function spin() {
             btn.disabled = true;
 
-            // 천의 자리를 무조건 2로 고정 (확률 100%)
-            const thousandDigit = 2; 
+            // 1. 천의 자리 확률 설정 (1 또는 2가 50:50 확률)
+            const thousandDigit = Math.random() < 0.5 ? 1 : 2;
 
-            // 나머지 백, 십, 일의 자리는 랜덤 (예: 2,450원 등)
+            // 2. 나머지 백, 십, 일의 자리는 000~999 랜덤
             const rest = Math.floor(Math.random() * 1000).toString().padStart(3, '0');
             
-            // 만의 자리는 0으로 고정하여 "02XXX" 형태 생성
+            // 3. 만의 자리는 0으로 고정하여 "0[1or2][rest]" 형태 생성
             const resultAmount = "0" + thousandDigit.toString() + rest;
             const resultArr = resultAmount.split("");
 
+            // 애니메이션 시작
             resultArr.forEach((digit, index) => {
+                // 이전 결과 초기화 (필요시)
+                slots[index].style.transition = 'none';
+                slots[index].style.transform = 'translateY(0)';
+
+                // 브라우저가 transition: none을 인식할 시간을 줌
                 setTimeout(() => {
                     const targetDigit = parseInt(digit);
+                    // 50번째 세트 위치로 이동하여 회전 느낌 극대화
                     const finalPosition = -((50 + targetDigit) * slotHeight);
                     
-                    slots[index].style.transition = `transform ${2.5 + index * 0.7}s cubic-bezier(0.1, 0.45, 0.1, 1)`;
+                    slots[index].style.transition = `transform ${2.5 + index * 0.6}s cubic-bezier(0.1, 0.45, 0.1, 1)`;
                     slots[index].style.transform = `translateY(${finalPosition}px)`;
-                }, index * 300);
+                }, 50);
             });
 
+            // 모든 애니메이션이 끝난 후 결과 알림
             setTimeout(() => {
                 const finalValue = parseInt(resultAmount);
-                alert(`축하합니다! ${finalValue.toLocaleString()}원에 당첨되셨습니다!`);
+                alert(`🎉 축하합니다! ${finalValue.toLocaleString()}원에 당첨되셨습니다!`);
                 btn.disabled = false;
-            }, 6500);
+            }, 6000);
         }
 
         btn.addEventListener('click', spin);
