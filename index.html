@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<title>Another Account</title>
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<header class="topbar">
+
+<div class="logo" onclick="resetAll()">
+    Another Account
+</div>
+
+<div class="search-wrap">
+
+    <div class="search" id="searchBox">
+
+        <input id="searchInput" placeholder="게임 / 계정 / 초성 검색">
+        <button onclick="search()">검색</button>
+
+    </div>
+
+    <div class="suggest" id="suggestBox"></div>
+
+</div>
+
+<div class="auth">
+    <button class="auth-btn" onclick="openModal()">
+        로그인 / 회원가입
+    </button>
+</div>
+
+</header>
+
+<nav class="nav">
+<a>계정거래</a>
+<a>게임머니</a>
+<a>판매등록</a>
+<a>구매등록</a>
+</nav>
+
+<section class="hero">
+<h1>안전한 게임 계정 거래 플랫폼</h1>
+</section>
+
+<main class="layout">
+
+<!-- LEFT -->
+<aside class="side">
+
+<div class="rank-card">
+<h3>🔥 실시간 랭킹 TOP 10</h3>
+<ul id="rank"></ul>
+</div>
+
+</aside>
+
+<!-- CENTER -->
+<section class="content">
+
+<div id="noResult" class="no-result">검색 결과가 없습니다</div>
+
+<div class="grid">
+
+<div class="item" data-name="리그오브레전드">롤 계정</div>
+<div class="item" data-name="발로란트">발로란트 계정</div>
+<div class="item" data-name="배틀그라운드">배그 계정</div>
+<div class="item" data-name="메이플스토리">메이플 계정</div>
+<div class="item" data-name="로스트아크">로아 계정</div>
+<div class="item" data-name="피파온라인">피파 계정</div>
+
+</div>
+
+</section>
+
+</main>
+
+<!-- LOGIN MODAL -->
+<div id="modal" class="modal">
+
+<div class="modal-box">
+
+<h2>로그인</h2>
+
+<input placeholder="아이디">
+<input placeholder="비밀번호">
+
+<button class="login">로그인</button>
+
+<div class="social-title">소셜 로그인</div>
+
+<div class="social">
+<button class="naver">🟢 네이버</button>
+<button class="kakao">🟡 카카오</button>
+<button class="google">🔵 구글</button>
+<button class="discord">🟣 디스코드</button>
+</div>
+
+<div class="signup">계정이 없으십니까? 회원가입</div>
+
+<span class="close" onclick="closeModal()">닫기</span>
+
+</div>
+
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
