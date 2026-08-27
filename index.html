@@ -1,112 +1,150 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ko">
 <head>
-<meta charset="UTF-8">
-<title>Another Account</title>
-<link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>2026년 9월달 라이엇 신용티어표</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&family=Noto+Serif+KR:ital,wght@0,400;1,500&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: #191919;
+      color: #d0d0d0;
+      font-family: "Noto Sans KR", sans-serif;
+    }
+
+    .credit {
+      width: min(680px, 100%);
+      margin: 0 auto;
+      padding: 8px 22px 28px;
+      text-align: center;
+    }
+
+    .quote {
+      color: #b9b9b9;
+      font: 700 54px/0.7 Georgia, serif;
+    }
+
+    h1 {
+      margin: 25px 0 13px;
+      color: #d4d4d4;
+      font: italic 500 22px "Noto Serif KR", serif;
+    }
+
+    .author {
+      margin: 0;
+      color: #aaa;
+      font-size: 15px;
+    }
+
+    .quote.close { margin-top: 25px; }
+
+    .tier {
+      margin-top: 47px;
+    }
+
+    .tier + .tier {
+      margin-top: 34px;
+    }
+
+    .tier h2 {
+      margin: 0 0 3px;
+      font-size: 19px;
+      font-weight: 500;
+    }
+
+    .tier p {
+      margin: 0;
+      color: #d1d1d1;
+      font-size: 18px;
+      line-height: 1.7;
+      word-break: keep-all;
+    }
+
+    .red h2 { color: #a83a37; }
+    .orange h2 { color: #b5782d; }
+    .yellow h2 { color: #b7a63c; }
+    .blue h2 { color: #28799c; }
+    .purple h2 { color: #9a4b91; }
+    .gray h2 { color: #aaa; }
+
+    .notice {
+      margin: 62px 0 0;
+      color: #ad3936;
+      font-size: 19px;
+      line-height: 1.65;
+      text-decoration: underline;
+      text-underline-offset: 4px;
+    }
+  </style>
 </head>
-
 <body>
+  <main class="credit">
+    <div class="quote">“</div>
 
-<header class="topbar">
+    <h1>2026년 9월달 라이엇 신용티어표</h1>
+    <p class="author">제작 : 태민</p>
 
-<div class="logo" onclick="resetAll()">
-    Another Account
-</div>
+    <div class="quote close">”</div>
 
-<div class="search-wrap">
+    <section class="tier red">
+      <h2>멍불허전</h2>
+      <p>연호 시연</p>
+    </section>
 
-    <div class="search" id="searchBox">
+    <section class="tier orange">
+      <h2>대가리</h2>
+      <p>태민 지우캐 일태 민상</p>
+    </section>
 
-        <input id="searchInput" placeholder="게임 / 계정 / 초성 검색">
-        <button onclick="search()">검색</button>
+    <section class="tier yellow">
+      <h2>엘리트 ( 관리자 )</h2>
+      <p>제이 은돌 마너 이준 나무 루카스 에코</p>
+    </section>
 
-    </div>
+    <section class="tier blue">
+      <h2>초국신</h2>
+      <p>역전 감자 또파 영월 민석 존야 윤석 루트 제이지</p>
+    </section>
 
-    <div class="suggest" id="suggestBox"></div>
+    <section class="tier blue">
+      <h2>국신</h2>
+      <p>꿀 예준 해피 지현 시아 재혁 탑튼 기역 stars<br>
+        경준 키리 지성 짱구 한빛 천국 달(발꺼) 단우 유성 파이어</p>
+    </section>
 
-</div>
+    <section class="tier purple">
+      <h2>신용</h2>
+      <p>혈구 지후 현준 밍구 제트 원준 망고 오링 슈가 알트<br>
+        어스 명석 테이 미유 리신기사 송윤 타문 유진 프로 JUNE</p>
+    </section>
 
-<div class="auth">
-    <button class="auth-btn" onclick="openModal()">
-        로그인 / 회원가입
-    </button>
-</div>
+    <section class="tier gray">
+      <h2>민들</h2>
+      <p>우치 키키 cox 유진 타마마 자드 안스 프로<br>
+        짱구(팬판) 딸기 타쿠 연어 이번 쩡2 똥이 챔스 두팔 쿠왕이 이<br>
+        린 몽이 유일무이 이스타 빠밤 렌드 이트 신나연 정현</p>
+    </section>
 
-</header>
+    <section class="tier red">
+      <h2>I 블랙리스트 I</h2>
+      <p>김X용 오X혁(사기) 키X(사칭,사기) 해X(사기)</p>
+    </section>
 
-<nav class="nav">
-<a>계정거래</a>
-<a>게임머니</a>
-<a>판매등록</a>
-<a>구매등록</a>
-</nav>
+    <section class="tier blue">
+      <h2>라이엇 통합 신용맵</h2>
+      <p><i>ApeX 2군 | ApeX 1군 | VN | Story | [ 强 ]</i></p>
+    </section>
 
-<section class="hero">
-<h1>안전한 게임 계정 거래 플랫폼</h1>
-</section>
-
-<main class="layout">
-
-<!-- LEFT -->
-<aside class="side">
-
-<div class="rank-card">
-<h3>🔥 실시간 랭킹 TOP 10</h3>
-<ul id="rank"></ul>
-</div>
-
-</aside>
-
-<!-- CENTER -->
-<section class="content">
-
-<div id="noResult" class="no-result">검색 결과가 없습니다</div>
-
-<div class="grid">
-
-<div class="item" data-name="리그오브레전드">롤 계정</div>
-<div class="item" data-name="발로란트">발로란트 계정</div>
-<div class="item" data-name="배틀그라운드">배그 계정</div>
-<div class="item" data-name="메이플스토리">메이플 계정</div>
-<div class="item" data-name="로스트아크">로아 계정</div>
-<div class="item" data-name="피파온라인">피파 계정</div>
-
-</div>
-
-</section>
-
-</main>
-
-<!-- LOGIN MODAL -->
-<div id="modal" class="modal">
-
-<div class="modal-box">
-
-<h2>로그인</h2>
-
-<input placeholder="아이디">
-<input placeholder="비밀번호">
-
-<button class="login">로그인</button>
-
-<div class="social-title">소셜 로그인</div>
-
-<div class="social">
-<button class="naver">🟢 네이버</button>
-<button class="kakao">🟡 카카오</button>
-<button class="google">🔵 구글</button>
-<button class="discord">🟣 디스코드</button>
-</div>
-
-<div class="signup">계정이 없으십니까? 회원가입</div>
-
-<span class="close" onclick="closeModal()">닫기</span>
-
-</div>
-
-</div>
-
-<script src="script.js"></script>
+    <p class="notice">
+      위 티어표에서는 멍불허전, 대가리<br>
+      제외 신용도에 따른 순서차이 존재합니다
+    </p>
+  </main>
 </body>
 </html>
